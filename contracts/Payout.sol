@@ -14,13 +14,19 @@ contract PayoutContract {
     address[] public investors;
     mapping(address => uint) private balances;
 
-    constructor() {
-
+    constructor(address[] memory _investors, uint _n_assets) {
+        n_investors = _investors.length;
+        n_assets = _n_assets;
+        investors = _investors;
     }
 
     function addInvestor(address _investorAddress) public {
         investors.push(_investorAddress);
         n_investors++;
+    }
+
+    function addAsset() public {
+        n_assets++;
     }
 
 
