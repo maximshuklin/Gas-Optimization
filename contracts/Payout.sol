@@ -3,8 +3,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 /** 
- * @title Dividend Payout
- * @dev Implements dividend payout function for investors
+ * @title Dividend Payments
+ * @dev Implements smart Contract for Dividend Payments
  */
 contract PayoutContract {
 
@@ -29,6 +29,17 @@ contract PayoutContract {
         n_assets++;
     }
 
+    function getBalance(address _owner) public view returns(uint) {
+        return balances[_owner];
+    }
+
+    function conductPayment() public payable {
+        for (uint i = 0; i < n_investors; i++) {
+            payable(investors[i]).transfer(balances[investors[i]]);
+            balances[investors[i]] = 0;
+        }
+    }
+
 
     // _assetsCost = [A1, ..., An] - costs of corresponding assets
     // _payoutMatrix - matrix size of n_investors x n_assets
@@ -41,13 +52,21 @@ contract PayoutContract {
             balances[investors[investor_index]] += transfer_value;
         }
         // transfer money to investors
-        for (uint i = 0; i < n_investors; i++) {
-            payable(investors[i]).transfer(balances[investors[i]]);
-            balances[investors[i]] = 0;
-        }
+        conductPayment();
     }
 
-    function getBalance(address _owner) public view returns(uint) {
-        return balances[_owner];
+
+    function payoutSparse(uint[3][] memory _payoutTriples, uint[] memory _assetsCost) public payable {
+        for (uint i = 0; i < _payoutTriples.length; i++) {
+            uint investor_index = _payoutTriples[i][0];
+            uint asset_index    = _payoutTriples[i][1];
+            uint invest_value   = _payoutTriples[i][2];
+
+            uint transfer_value = _assetsCost[asset_index] * invest_value;
+            balances[investors[investor_index]] += transfer_value;
+        }
+        // transfer money to investors
+        conductPayment();
     }
+
 }
