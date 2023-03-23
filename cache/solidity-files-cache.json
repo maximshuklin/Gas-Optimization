@@ -1,12 +1,12 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Users/maksimsuklin/hse/coursework/contracts/Lock.sol": {
-      "lastModificationDate": 1675285285330,
-      "contentHash": "4016822f807e1a76c619d67930a7ed45",
+    "/Users/maksimshuklin/hse/coursework/contracts/Lock.sol": {
+      "lastModificationDate": 1679598151770,
+      "contentHash": "ae66265769cc28ebdaa34881df95bc5e",
       "sourceName": "contracts/Lock.sol",
       "solcConfig": {
-        "version": "0.8.17",
+        "version": "0.8.18",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -34,6 +34,41 @@
       ],
       "artifacts": [
         "Lock"
+      ]
+    },
+    "/Users/maksimshuklin/hse/coursework/contracts/Payout.sol": {
+      "lastModificationDate": 1679598320245,
+      "contentHash": "72138876c384f9065347ae805c604a2a",
+      "sourceName": "contracts/Payout.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.0 <0.9.0"
+      ],
+      "artifacts": [
+        "PayoutContract"
       ]
     }
   }
