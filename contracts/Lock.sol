@@ -19,4 +19,10 @@ contract Lock {
         }
     }
 
+    function someLoop2() public {
+        for (uint i = 0; i < numbers.length; ++i) {
+            numbers[i] = 0;
+        }
+    }
+
 }

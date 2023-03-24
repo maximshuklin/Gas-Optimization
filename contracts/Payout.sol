@@ -2,6 +2,8 @@
 
 pragma solidity >=0.8.0 <0.9.0;
 
+import "hardhat/console.sol";
+
 /** 
  * @title Dividend Payments
  * @dev Implements smart Contract for Dividend Payments
@@ -29,10 +31,12 @@ contract PayoutContract {
         n_assets++;
     }
 
-    function getBalance(address _owner) public view returns(uint) {
+    function getBalance(address _owner) public view 
+    returns(uint) {
         return balances[_owner];
     }
 
+    // Something is wrong with this function
     function conductPayment() public payable {
         for (uint i = 0; i < n_investors; i++) {
             payable(investors[i]).transfer(balances[investors[i]]);
@@ -51,8 +55,9 @@ contract PayoutContract {
             }
             balances[investors[investor_index]] += transfer_value;
         }
+
         // transfer money to investors
-        conductPayment();
+        // conductPayment();
     }
 
 
@@ -66,7 +71,7 @@ contract PayoutContract {
             balances[investors[investor_index]] += transfer_value;
         }
         // transfer money to investors
-        conductPayment();
+        // conductPayment();
     }
 
 }

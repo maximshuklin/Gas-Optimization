@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/maksimshuklin/hse/coursework/contracts/Lock.sol": {
-      "lastModificationDate": 1679601587690,
-      "contentHash": "d0e101d038ba5add0233e1981ef604ed",
+      "lastModificationDate": 1679663266368,
+      "contentHash": "a7b0f8c70a13cbc8d1fdf76c33b7215c",
       "sourceName": "contracts/Lock.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -37,9 +37,46 @@
       ]
     },
     "/Users/maksimshuklin/hse/coursework/contracts/Payout.sol": {
-      "lastModificationDate": 1679598320245,
-      "contentHash": "72138876c384f9065347ae805c604a2a",
+      "lastModificationDate": 1679675313893,
+      "contentHash": "408078c7d20e1d501ab65d62f8904330",
       "sourceName": "contracts/Payout.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.0 <0.9.0"
+      ],
+      "artifacts": [
+        "PayoutContract"
+      ]
+    },
+    "/Users/maksimshuklin/hse/coursework/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1679598135907,
+      "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
+      "sourceName": "hardhat/console.sol",
       "solcConfig": {
         "version": "0.8.18",
         "settings": {
@@ -65,10 +102,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.8.0 <0.9.0"
+        ">= 0.4.22 <0.9.0"
       ],
       "artifacts": [
-        "PayoutContract"
+        "console"
       ]
     }
   }
