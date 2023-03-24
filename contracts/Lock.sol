@@ -5,30 +5,18 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 
 contract Lock {
-    uint public unlockTime;
-    address payable public owner;
+    uint[] numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    event Withdrawal(uint amount, uint when);
-
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
-
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
+    constructor (uint[] memory arr) {
+        for (uint i = 0; i < arr.length; i++) {
+            numbers[i] = arr[i];
+        }
     }
 
-    function withdraw() public {
-        // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
-
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
-
-        emit Withdrawal(address(this).balance, block.timestamp);
-
-        owner.transfer(address(this).balance);
+    function someLoop() public {
+        for (uint i = 0; i < numbers.length; i++) {
+            numbers[i] = 0;
+        }
     }
+
 }
