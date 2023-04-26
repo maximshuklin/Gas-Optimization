@@ -37,8 +37,8 @@
       ]
     },
     "/Users/maksimshuklin/hse/coursework/contracts/Payout.sol": {
-      "lastModificationDate": 1679675313893,
-      "contentHash": "408078c7d20e1d501ab65d62f8904330",
+      "lastModificationDate": 1680890332788,
+      "contentHash": "5155552b3f32105cdb591db3d480cd6d",
       "sourceName": "contracts/Payout.sol",
       "solcConfig": {
         "version": "0.8.18",

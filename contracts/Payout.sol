@@ -45,13 +45,14 @@ contract PayoutContract {
     }
 
 
-    // _assetsCost = [A1, ..., An] - costs of corresponding assets
-    // _payoutMatrix - matrix size of n_investors x n_assets
-    function payoutNaive(uint[][] memory _payoutMatrix, uint[] memory _assetsCost) public payable {
+    // _assetsCost: [A1, ..., An] - costs of corresponding assets
+    // _payoutMatrix: matrix size of n_assets x n_investors
+    // so result equals to 
+    function payoutNaive(uint[][] memory _payoutMatrix, uint[] memory _assetsCost, uint[] memory _investor_idx) public payable {
         for (uint investor_index = 0; investor_index < n_investors; investor_index++) {
             uint transfer_value = 0;
             for (uint asset = 0; asset < n_assets; ++asset) {
-                transfer_value += _payoutMatrix[investor_index][asset] * _assetsCost[asset];
+                transfer_value += _payoutMatrix[asset][investor_index] * _assetsCost[asset];
             }
             balances[investors[investor_index]] += transfer_value;
         }
@@ -61,6 +62,8 @@ contract PayoutContract {
     }
 
 
+    // _payoutTriples: array of triples:
+    // (investor_index, asset_index, invest_value)
     function payoutSparse(uint[3][] memory _payoutTriples, uint[] memory _assetsCost) public payable {
         for (uint i = 0; i < _payoutTriples.length; i++) {
             uint investor_index = _payoutTriples[i][0];
@@ -74,4 +77,79 @@ contract PayoutContract {
         // conductPayment();
     }
 
+    
+    // payoutMatrix = L @ R
+    // (_assetsCost @ L) @ R
+    // L is n_assets x rank
+    // R is rank x n_investors
+    // len(_assetsCost) = n_assets
+    function payoutLowRank(uint[][] memory L, uint[][] memory R, uint[] memory _assetsCost) public payable { 
+        uint rank = L[0].length;
+        uint[] memory temp = new uint[](rank);
+        for (uint col = 0; col < rank; ++col) {
+            uint value = 0;
+            for (uint i = 0; i < n_assets; ++i) {
+                value += _assetsCost[i] * L[i][col];
+            }
+            temp[col] = value;
+        }
+        for (uint j = 0; j < n_investors; ++j) {
+            uint transfer_value = 0;
+            for (uint i = 0; i < rank; ++i) {
+                transfer_value += temp[i] * R[i][j];
+            }
+            uint investor_index = j;
+            balances[investors[investor_index]] += transfer_value;
+        }
+     
+        // O((n_assets + n_investors) * rank) time and O(rank) additional memory
+    }
 }
+
+/*
+
+[A A A A A B B B B B C C C C C]
+
+[A A A A A A A A B B B B C D E F G H T]
+
+строки - активы
+столбцы - ценные бумаги
+
+
+Матрица A
+
+A = U @ V --> f(U, V)
+
+
+|
+|
+|
+
+i [.....]
+i [.....]
+i [.....]
+
+*/
+
+
+
+
+
+
+
+
+
+/*
+
+Consider _payoutMatrix size of n_assets x n_investors.
+Assume we have a lot of repeating columns (different investors by similar packages).
+In this case we can think of low-rank matrix
+
+*/
+
+
+
+
+
+
+
