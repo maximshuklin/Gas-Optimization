@@ -73,6 +73,10 @@ describe("Payout something", function () {
     //     await payout.payoutNaive(payout_matrix, assets_costs);
     // });
 
+
+
+    
+
     it("Payout Naive. Python Test", async function() {
         const Payout = await ethers.getContractFactory("PayoutContract");
 
@@ -130,16 +134,3 @@ describe("Payout something", function () {
 
 });
 
-/*
-[1, 2, 3]
-[2, 3, 4]
-*
-[1]
-[1]
-[10]
-
-= 
-[33]
-[45]
-
-*/

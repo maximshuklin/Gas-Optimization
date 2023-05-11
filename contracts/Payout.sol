@@ -48,7 +48,7 @@ contract PayoutContract {
     // _payoutMatrix: matrix size of n_assets x n_investors
     // so result equals to 
     // function payoutNaive(uint[][] memory _payoutMatrix, uint[] memory _assetsCost, uint[] memory _investor_idx) public payable {
-    function payoutNaive(uint[][] memory _payoutMatrix, uint[] memory _assetsCost) public payable {
+    function payoutNaive(uint[][] calldata _payoutMatrix, uint[] calldata _assetsCost) public payable {
         for (uint investor_index = 0; investor_index < n_investors; investor_index++) {
             uint transfer_value = 0;
             for (uint asset = 0; asset < n_assets; ++asset) {
@@ -56,15 +56,12 @@ contract PayoutContract {
             }
             balances[investors[investor_index]] += transfer_value;
         }
-
-        // transfer money to investors
-        // conductPayment();
     }
 
 
     // _payoutTriples: array of triples:
     // (investor_index, asset_index, invest_value)
-    function payoutSparse(uint[3][] memory _payoutTriples, uint[] memory _assetsCost) public payable {
+    function payoutSparse(uint[3][] calldata _payoutTriples, uint[] calldata _assetsCost) public payable {
         console.log("length=", _payoutTriples.length);
         for (uint i = 0; i < _payoutTriples.length; i++) {
             uint asset_index    = _payoutTriples[i][0];
@@ -74,11 +71,9 @@ contract PayoutContract {
             uint transfer_value = _assetsCost[asset_index] * invest_value;
             balances[investors[investor_index]] += transfer_value;
         }
-        // transfer money to investors
-        // conductPayment();
     }
 
-    function payoutRepeatedColumns(uint[] memory column_id, uint[][] memory columns, uint[] memory _assetsCost) public payable {
+    function payoutRepeatedColumns(uint[] calldata column_id, uint[][] calldata columns, uint[] calldata _assetsCost) public payable {
         for (uint col = 0; col < columns.length; ++col) {
             uint transfer_value = 0;
             for (uint i = 0; i < _assetsCost.length; ++i) {
@@ -98,7 +93,7 @@ contract PayoutContract {
     // L is n_assets x rank
     // R is rank x n_investors
     // len(_assetsCost) = n_assets
-    function payoutLowRank(uint[][] memory L, uint[][] memory R, uint[] memory _assetsCost) public payable { 
+    function payoutLowRank(uint[][] calldata L, uint[][] calldata R, uint[] calldata _assetsCost) public payable { 
         uint rank = L[0].length;
         uint[] memory temp = new uint[](rank);
         for (uint col = 0; col < rank; ++col) {

@@ -16,7 +16,7 @@ def generate_sparse(n, m, cap = 20, max_value = 100):
 	"""
 	Parameters:
 		n, m - shape of array
-		cap  - fullness of sparse matrix
+		cap  - fullness of sparse matrix (in %)
 	Returns:
 		Sparse matrix size of n x m with cap percent of filled elements
 	"""
@@ -88,6 +88,6 @@ def make_test_low_rank(n = 10, m = 10, r = 5, max_value = 10):
 	with open("test_low_rank_matrix.txt", "w") as f:
 		print(generate_low_rank(n, m, r, max_value), file=f)
 
-make_test_random()
-make_test_sparse()
-make_test_low_rank()
+# make_test_random()
+# make_test_sparse()
+# make_test_low_rank()

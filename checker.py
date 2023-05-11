@@ -122,14 +122,14 @@ def repeated_columns_transform(
         print(json.dumps(conf), file=fout)
 
 
-def check(matrix, assets_cost):
+def get_timings(matrix, assets_cost):
     naive_transform(matrix, assets_cost)
     sparse_transform(matrix, assets_cost)
     # low_rank_transform(matrix, assets_cost)
     repeated_columns_transform(matrix, assets_cost)
 
-    os.system(f"npx hardhat compile 2>> /dev/null")
-    os.system(f"npx hardhat test > {default_output} 2>> /dev/null")
+    # os.system(f"npx hardhat compile >/dev/null 2>&1")
+    os.system(f"npx hardhat test > {default_output} 2>/dev/null ")
 
     function_names = [
         "payoutNaive",
@@ -142,7 +142,7 @@ def check(matrix, assets_cost):
     with open(default_output, "r") as fin:
         for line in fin:
             if line.find("PayoutContract") != -1:
-                gas_amount = 0
+                gas_amounjt = 0
                 for s in line.split(" "):
                     if s.isdigit() == True:
                         gas_amount = int(s)
@@ -153,3 +153,11 @@ def check(matrix, assets_cost):
                         gas[funcname] = gas_amount
 
     return gas
+
+gas = get_timings([
+    [1, 2],
+    [2, 3],
+    [3, 4]
+    ], [1, 1, 10])
+
+print(gas)
