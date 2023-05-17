@@ -50,6 +50,21 @@ def generate_low_rank(n, m, r, max_value = 100):
 	A = np.array(U) @ np.array(V)
 	return (A.tolist(), U, V)
 
+
+def generate_repeated_columns(n, m, r, max_value = 100):
+	"""
+	Parameters:
+		n, m - shape of array
+		r - desired rank of matrix
+	Returns:
+		columns - set of columns
+		column_id - id's of columns
+	"""
+	columns = generate_random(n, r)
+	column_id = [random.randint(0, r - 1) for i in range(m)]
+	return columns, column_id
+
+
 def display_matrix(A):
 	n = len(A)
 	m = len(A[0])
