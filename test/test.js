@@ -132,5 +132,24 @@ describe("Payout something", function () {
         await payout.payoutRepeatedColumns(column_id, columns, assets_cost);
     });
 
+
+    it("Payout LowRank. Python Test", async function() {
+        const Payout = await ethers.getContractFactory("PayoutContract");
+
+        var json = require('./data/low_rank.json');
+        const n_assets = json.n_assets;
+        const n_securities = json.n_securities;
+        const matrix = json.matrix;
+        const assets_cost = json.assets_cost;
+        const L = json.L;
+        const R = json.R;
+
+        const signers = getBunchOfSigners(n_securities);
+
+        const payout = await Payout.deploy(signers, n_assets);
+        await payout.deployed();
+
+        await payout.payoutLowRank(L, R, assets_cost);
+    });
 });
 

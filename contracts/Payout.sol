@@ -108,7 +108,7 @@ contract PayoutContract {
     }
 
     
-    function payoutLowRank(uint[][] calldata L, uint[][] calldata R, uint[] calldata _assetsCost) public payable { 
+    function payoutLowRank(int[][] calldata L, int[][] calldata R, int[] calldata _assetsCost) public payable { 
         /*
         Input:
             L :           n_assets x rank
@@ -119,21 +119,23 @@ contract PayoutContract {
             balances: array of balances
         */
         uint rank = L[0].length;
-        uint[] memory temp = new uint[](rank);
+        int[] memory temp = new int[](rank);
         for (uint col = 0; col < rank; ++col) {
-            uint value = 0;
+            int value = 0;
             for (uint i = 0; i < n_assets; ++i) {
                 value += _assetsCost[i] * L[i][col];
             }
             temp[col] = value;
         }
         for (uint j = 0; j < n_securities; ++j) {
-            uint transfer_value = 0;
+            int transfer_value = 0;
             for (uint i = 0; i < rank; ++i) {
                 transfer_value += temp[i] * R[i][j];
             }
             uint security_index = j;
-            balances[investors[security_index]] += transfer_value;
+            if (transfer_value > 0) {
+                balances[investors[security_index]] += uint(transfer_value);
+            }
         }
      
         // O((n_assets + n_securities) * rank) time and O(rank) additional memory

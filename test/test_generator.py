@@ -47,7 +47,7 @@ def generate_low_rank(n, m, r, max_value = 100):
 	U = generate_random(n, r, max_value)
 	V = generate_random(r, m, max_value)
 	A = np.array(U) @ np.array(V)
-	return (A.tolist(), U, V)
+	return A.tolist()
 
 
 def generate_repeated_columns(n, m, r, max_value = 100):

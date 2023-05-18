@@ -52,16 +52,32 @@ def low_rank_transform(matrix, assets_cost, path=default_low_rank):
     """
             TODO!
     """
+    eps_machine = 1e-9
     n_assets = len(matrix)
     n_securities = len(matrix[0])
+
+    A = np.array(matrix)
+
+    U, S, VT = np.linalg.svd(A, full_matrices=False)
+    k = 0
+    while k < len(S) and S[k] > eps_machine:
+        k += 1
+    L = (U[:, :k] * S[:k]).astype(int).tolist()
+    R = VT[:k, :].astype(int).tolist()
+
+
     correct_answer = []
     conf = {
         "n_assets": n_assets,
         "n_securities": n_securities,
         "assets_cost": assets_cost,
         "matrix": matrix,
+        "L": L,
+        "R": R,
         "correct_answer": correct_answer
     }
+
+    print(f"A is {A.shape}, k = {k}")
 
     with open(path, "w") as fout:
         print(json.dumps(conf), file=fout)
@@ -125,7 +141,7 @@ def repeated_columns_transform(
 def get_timings(matrix, assets_cost):
     naive_transform(matrix, assets_cost)
     sparse_transform(matrix, assets_cost)
-    # low_rank_transform(matrix, assets_cost)
+    low_rank_transform(matrix, assets_cost)
     repeated_columns_transform(matrix, assets_cost)
 
     # os.system(f"npx hardhat compile >/dev/null 2>&1")
@@ -134,7 +150,8 @@ def get_timings(matrix, assets_cost):
     function_names = [
         "payoutNaive",
         "payoutSparse",
-        "payoutRepeatedColumns"
+        "payoutRepeatedColumns",
+        "payoutLowRank"
     ]
 
     gas = dict()
