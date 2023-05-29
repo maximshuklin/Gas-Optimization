@@ -77,8 +77,6 @@ def low_rank_transform(matrix, assets_cost, path=default_low_rank):
         "correct_answer": correct_answer
     }
 
-    print(f"A is {A.shape}, k = {k}")
-
     with open(path, "w") as fout:
         print(json.dumps(conf), file=fout)
 
@@ -171,10 +169,3 @@ def get_timings(matrix, assets_cost):
 
     return gas
 
-gas = get_timings([
-    [1, 2],
-    [2, 3],
-    [3, 4]
-    ], [1, 1, 10])
-
-print(gas)

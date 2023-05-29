@@ -73,7 +73,6 @@ contract PayoutContract {
         Returns:
             balances: array of balances
         */
-        console.log("length=", _payoutTriples.length);
         for (uint i = 0; i < _payoutTriples.length; i++) {
             uint asset_index    = _payoutTriples[i][0];
             uint security_index = _payoutTriples[i][1];
