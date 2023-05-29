@@ -28,9 +28,9 @@ $$
  \end{cases}
 $$
 
-\begin{equation}\label{equation-cost}
+$$
 \text{cost}[s] = \sum \limits_{i = 1}^{m} C_{i} A_{i, s} \Longleftrightarrow{} \text{cost} = C^T A = (A^T C)^T
-\end{equation}
+$$
 
 Целью является вычисления массива $\text{balances}[i]$ алгоритмически по входным данным $A, C, I$ таким образом, чтобы количество потребляемого газа в смарт контракте было минимально возможным. 
 
