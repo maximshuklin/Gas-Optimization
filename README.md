@@ -117,7 +117,7 @@ plt.show()
 
 
     
-![png](output_8_0.png)
+![jpg](static_files/dense_matrix.jpg)
     
 
 
@@ -170,7 +170,7 @@ plt.show()
 
 
     
-![png](output_13_0.png)
+![jpg](static_files/sparse_20.jpg)
     
 
 
@@ -228,7 +228,7 @@ plt.show()
 
 
     
-![png](output_18_0.png)
+![jpg](static_files/repeated_20.jpg)
     
 
 
@@ -290,6 +290,6 @@ plt.show()
 
 
     
-![png](output_23_0.png)
+![jpg](static_files/sparse_20.jpg)
     
 
