@@ -90,6 +90,9 @@ def debug_test_prints():
 	print("V:")
 	display_matrix(V)
 
+def generate_investors(n_securities):
+	return [random.randint(0, n_securities - 1) for i in range(n_securities)]
+
 
 def make_test_random(n = 10, m = 10, max_value = 10):
 	with open("test_random_matrix.txt", "w") as f:

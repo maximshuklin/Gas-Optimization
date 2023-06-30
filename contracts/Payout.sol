@@ -13,24 +13,13 @@ contract PayoutContract {
     uint n_securities = 0;
     uint n_assets = 0;
 
-    address[] public investors;
+    address[] public investor_address; // unique addresses of investors
     mapping(address => uint) private balances;
 
-    constructor(address[] memory _securities, uint _n_assets) {
-        n_securities = _securities.length;
+    constructor(address[] memory _investor_address, uint _n_assets) {
+        investor_address = _investor_address;
+        n_securities = _investor_address.length;
         n_assets = _n_assets;
-        investors = _securities;
-    }
-
-
-    function addInvestor(address _investorAddress) public {
-        investors.push(_investorAddress);
-        n_securities++;
-    }
-
-
-    function addAsset() public {
-        n_assets++;
     }
 
     
@@ -39,15 +28,10 @@ contract PayoutContract {
     }
     
 
-    function conductPayment() public payable {
-        for (uint i = 0; i < n_securities; i++) {
-            payable(investors[i]).transfer(balances[investors[i]]);
-            balances[investors[i]] = 0;
-        }
-    }
-
-
-    function payoutNaive(uint[][] calldata _payoutMatrix, uint[] calldata _assetsCost) public payable {
+    function payoutNaive(
+                   uint[][] memory _payoutMatrix,
+                   uint[] calldata _assetsCost,
+                   uint[] calldata investors) public payable {
         /*
         Input:
             _payoutMatrix : n_assets x n_securities matrix
@@ -60,12 +44,15 @@ contract PayoutContract {
             for (uint asset = 0; asset < n_assets; ++asset) {
                 transfer_value += _payoutMatrix[asset][security] * _assetsCost[asset];
             }
-            balances[investors[security]] += transfer_value;
+            balances[investor_address[investors[security]]] += transfer_value;
         }
     }
 
 
-    function payoutSparse(uint[3][] calldata _payoutTriples, uint[] calldata _assetsCost) public payable {
+    function payoutSparse(
+                   uint[3][] calldata _payoutTriples,
+                   uint[] calldata _assetsCost,
+                   uint[] calldata investors) public payable {
         /*
         Input:
             _payoutTriples : 
@@ -79,12 +66,16 @@ contract PayoutContract {
             uint invest_value   = _payoutTriples[i][2];
 
             uint transfer_value = _assetsCost[asset_index] * invest_value;
-            balances[investors[security_index]] += transfer_value;
+            balances[investor_address[investors[security_index]]] += transfer_value;
         }
     }
 
 
-    function payoutRepeatedColumns(uint[] calldata _column_id, uint[][] calldata _columns, uint[] calldata _assetsCost) public payable {
+    function payoutRepeatedColumns(
+                   uint[] calldata _column_id,
+                   uint[][] calldata _columns,
+                   uint[] calldata _assetsCost,
+                   uint[] calldata investors) public payable {
         /*
         Input:
             _column_id :  array size of n_securities
@@ -100,14 +91,18 @@ contract PayoutContract {
             }
             for (uint i = 0; i < _columns.length; ++i) {
                 if (_column_id[i] == col) {
-                    balances[investors[i]] += transfer_value;
+                    balances[investor_address[investors[i]]] += transfer_value;
                 }
             }
         }
     }
 
     
-    function payoutLowRank(int[][] calldata L, int[][] calldata R, int[] calldata _assetsCost) public payable { 
+    function payoutLowRank(
+                   int[][] calldata L,
+                   int[][] calldata R,
+                   int[] calldata _assetsCost,
+                   uint[] calldata investors) public payable { 
         /*
         Input:
             L :           n_assets x rank
@@ -133,12 +128,51 @@ contract PayoutContract {
             }
             uint security_index = j;
             if (transfer_value > 0) {
-                balances[investors[security_index]] += uint(transfer_value);
+                balances[investor_address[investors[security_index]]] += uint(transfer_value);
             }
         }
      
         // O((n_assets + n_securities) * rank) time and O(rank) additional memory
     }
+
+    function payoutRepeatedInvestors(
+                   uint[][] memory _payoutMatrix,
+                   uint[] calldata _assetsCost,
+                   uint[] memory investors) public payable {
+        /*
+            - Description
+        */
+        uint[] memory was_index = new uint[](n_securities); // indexing from 1
+        uint unique_counter = 0;
+        for (uint column = 0; column < n_securities; ++column) {
+            uint index = was_index[investors[column]];
+            if (index != 0) {
+                --index;
+                for (uint i = 0; i < n_assets; ++i) {
+                    _payoutMatrix[i][index] += _payoutMatrix[i][column];
+                }
+            } else {
+                if (column != unique_counter) {
+                    for (uint i = 0; i < n_assets; ++i) {
+                        _payoutMatrix[i][unique_counter] = _payoutMatrix[i][column];
+                    }
+                }
+                was_index[investors[column]] = unique_counter + 1;
+                investors[unique_counter] = investors[column];
+                ++unique_counter;
+            }
+        }
+        // multiplication
+        for (uint security = 0; security < unique_counter; security++) {
+            uint transfer_value = 0;
+            for (uint asset = 0; asset < n_assets; ++asset) {
+                transfer_value += _payoutMatrix[asset][security] * _assetsCost[asset];
+            }
+            balances[investor_address[investors[security]]] += transfer_value;
+        }
+
+    }
+
 }
 
 /*

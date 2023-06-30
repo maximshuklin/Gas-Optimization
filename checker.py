@@ -10,7 +10,7 @@ default_repeated_columns = f"{prefix}/repeated_columns.json"
 default_output = f"{prefix}/output.json"
 
 
-def naive_transform(matrix, assets_cost, path=default_naive):
+def naive_transform(matrix, assets_cost, investors, path=default_naive):
     n_assets = len(matrix)
     n_securities = len(matrix[0])
     correct_answer = []
@@ -19,14 +19,15 @@ def naive_transform(matrix, assets_cost, path=default_naive):
         "n_securities": n_securities,
         "assets_cost": assets_cost,
         "matrix": matrix,
-        "correct_answer": correct_answer
+        "correct_answer": correct_answer,
+        "investors": investors
     }
 
     with open(path, "w") as fout:
         print(json.dumps(conf), file=fout)
 
 
-def sparse_transform(matrix, assets_cost, path=default_sparse):
+def sparse_transform(matrix, assets_cost, investors, path=default_sparse):
     n_assets = len(matrix)
     n_securities = len(matrix[0])
     correct_answer = []
@@ -41,14 +42,15 @@ def sparse_transform(matrix, assets_cost, path=default_sparse):
         "assets_cost": assets_cost,
         "matrix": matrix,
         "payout_triples": payout_triples,
-        "correct_answer": correct_answer
+        "correct_answer": correct_answer,
+        "investors": investors,
     }
 
     with open(path, "w") as fout:
         print(json.dumps(conf), file=fout)
 
 
-def low_rank_transform(matrix, assets_cost, path=default_low_rank):
+def low_rank_transform(matrix, assets_cost, investors, path=default_low_rank):
     """
             TODO!
     """
@@ -74,7 +76,8 @@ def low_rank_transform(matrix, assets_cost, path=default_low_rank):
         "matrix": matrix,
         "L": L,
         "R": R,
-        "correct_answer": correct_answer
+        "correct_answer": correct_answer,
+        "investors": investors
     }
 
     with open(path, "w") as fout:
@@ -84,6 +87,7 @@ def low_rank_transform(matrix, assets_cost, path=default_low_rank):
 def repeated_columns_transform(
         matrix,
         assets_cost,
+        investors,
         path=default_repeated_columns):
     """
     Output:
@@ -129,18 +133,22 @@ def repeated_columns_transform(
         "matrix": matrix,
         "column_id": column_id,
         "columns": columns,
-        "correct_answer": correct_answer
+        "correct_answer": correct_answer,
+        "investors": investors,
     }
 
     with open(path, "w") as fout:
         print(json.dumps(conf), file=fout)
 
 
-def get_timings(matrix, assets_cost):
-    naive_transform(matrix, assets_cost)
-    sparse_transform(matrix, assets_cost)
-    low_rank_transform(matrix, assets_cost)
-    repeated_columns_transform(matrix, assets_cost)
+def get_timings(matrix, assets_cost, investors = None):
+    if investors == None:
+        n_securities = len(matrix[0])
+        investors = [i % 5 for i in range(n_securities)]
+    naive_transform(matrix, assets_cost, investors)
+    sparse_transform(matrix, assets_cost, investors)
+    low_rank_transform(matrix, assets_cost, investors)
+    repeated_columns_transform(matrix, assets_cost, investors)
 
     # os.system(f"npx hardhat compile >/dev/null 2>&1")
     os.system(f"npx hardhat test > {default_output} 2>/dev/null ")
@@ -149,7 +157,8 @@ def get_timings(matrix, assets_cost):
         "payoutNaive",
         "payoutSparse",
         "payoutRepeatedColumns",
-        "payoutLowRank"
+        "payoutLowRank",
+        "payoutRepeatedInvestors"
     ]
 
     gas = dict()
