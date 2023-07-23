@@ -31,6 +31,7 @@ describe("Payout something", function () {
 
         const signers = getBunchOfSigners(n_securities);
 
+
         const payout = await Payout.deploy(signers, n_assets);
         await payout.deployed();
 

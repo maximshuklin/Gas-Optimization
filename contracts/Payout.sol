@@ -35,7 +35,8 @@ contract PayoutContract {
         /*
         Input:
             _payoutMatrix : n_assets x n_securities matrix
-            _assetsCost :   cost[1], ..., cost[n_assets] - cost of corresponding assets
+            _assetsCost   : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            investors     : array of investors corresponding to securities
         Returns:
             balances: array of balances
         */
@@ -55,8 +56,9 @@ contract PayoutContract {
                    uint[] calldata investors) public payable {
         /*
         Input:
-            _payoutTriples : 
-            _assetsCost :    cost[1], ..., cost[n_assets] - cost of corresponding assets
+            _payoutTriples : triples for COO format
+            _assetsCost    : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            investors      : array of investors corresponding to securities
         Returns:
             balances: array of balances
         */
@@ -78,9 +80,10 @@ contract PayoutContract {
                    uint[] calldata investors) public payable {
         /*
         Input:
-            _column_id :  array size of n_securities
-            _columns :    matrix size of (n_different_columns x n_assets)
-            _assetsCost : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            _column_id    : array size of n_securities
+            _columns      : matrix size of (n_different_columns x n_assets)
+            _assetsCost   : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            investors     : array of investors corresponding to securities
         Returns:
             balances: array of balances
         */
@@ -105,9 +108,11 @@ contract PayoutContract {
                    uint[] calldata investors) public payable { 
         /*
         Input:
-            L :           n_assets x rank
-            R :           rank x n_securities
-            _assetsCost : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            L             : n_assets x rank matrix
+            R             : rank x n_securities matrix
+            _assetsCost   : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            investors     : array of investors corresponding to securities
+
             payoutMatrix = L @ R - matrix decomposition
         Returns:
             balances: array of balances
@@ -140,7 +145,12 @@ contract PayoutContract {
                    uint[] calldata _assetsCost,
                    uint[] memory investors) public payable {
         /*
-            - Description
+        Input:
+            _payoutMatrix : n_assets x n_securities matrix
+            _assetsCost   : cost[1], ..., cost[n_assets] - cost of corresponding assets
+            investors     : array of investors corresponding to securities
+        Returns:
+            balances: array of balances
         */
         uint[] memory was_index = new uint[](n_securities); // indexing from 1
         uint unique_counter = 0;

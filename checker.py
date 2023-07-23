@@ -141,7 +141,7 @@ def repeated_columns_transform(
         print(json.dumps(conf), file=fout)
 
 
-def get_timings(matrix, assets_cost, investors = None):
+def get_timings(matrix, assets_cost, investors=None):
     if investors == None:
         n_securities = len(matrix[0])
         investors = [i % 5 for i in range(n_securities)]
